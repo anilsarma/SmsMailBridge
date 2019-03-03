@@ -86,5 +86,18 @@
         app:layout_constraintStart_toEndOf="@+id/button_verify"
         app:layout_constraintTop_toTopOf="@+id/button_verify" />
 
+    <CheckBox
+        android:id="@+id/checkbox_show_notification"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="40dp"
+        android:checked="true"
+        android:text="Show Notification"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.065"
+        app:layout_constraintStart_toStartOf="@+id/button_verify"
+        app:layout_constraintTop_toBottomOf="@+id/button_verify" />
+
 
 </android.support.constraint.ConstraintLayout>

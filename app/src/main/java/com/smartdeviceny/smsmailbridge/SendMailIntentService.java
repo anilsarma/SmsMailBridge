@@ -66,6 +66,7 @@ public class SendMailIntentService extends IntentService {
         String body = intent.getStringExtra(Constants.EXTRA_BODY);
         String from = intent.getStringExtra(Constants.ACCOUNT_NAME);
         Set<String> to = sharedPreferences.getStringSet(Constants.SHARED_PREF_RECIPIENTS, new HashSet<String>());
+        boolean showNotification = sharedPreferences.getBoolean(Constants.SHARED_PREF_SHOW_NOTIFICATION, true);
         String toRecipient = "";
         if (!to.isEmpty()) {
             toRecipient = to.toArray(new String[0])[0].trim();
@@ -92,7 +93,10 @@ public class SendMailIntentService extends IntentService {
 
             String result = SendGmailEmail(mService, toRecipient, credential.getSelectedAccountName(), subject, body);
             toastHandler.post(new ToastRunnable(getString(R.string.mail_sent_successfully)));
-            NotificationUtils.notify_user(this.getApplicationContext(), Constants.NOTIFICATION_CHANNEL, Constants.NOTIFICATION_GROUP_MAIN, "Mail Bridged" , body + "\n" + result, 3);
+            if( showNotification) {
+                NotificationUtils.notify_user(this.getApplicationContext(), Constants.NOTIFICATION_CHANNEL, Constants.NOTIFICATION_GROUP_MAIN, "Mail Bridged", body + "\n" + result,
+                        3);
+            }
             //NotificationUtils.notify_user(this.getApplicationContext(), Constants.NOTIFICATION_CHANNEL, Constants.NOTIFICATION_GROUP_MAIN, "Mail Bridged", body, 4);
 
         } catch (Exception e) {

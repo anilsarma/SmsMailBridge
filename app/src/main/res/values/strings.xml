@@ -2,9 +2,9 @@
     <string name="app_name">SMS Mail Bridge</string>
     <string name="service_name">SMSMailBridgeService</string>
 
-    <string name="btn_send_test_mail">Test Email</string>
+    <string name="btn_send_test_mail">TestTimeEpoch Email</string>
 
-    <string name="default_mail_subject">Test mail from SMSMailBridge</string>
+    <string name="default_mail_subject">TestTimeEpoch mail from SMSMailBridge</string>
     <string name="default_mail_body">This body in a real SMS would contain the SMS message.</string>
 
     <string name="mail_subject">Forwarded SMS</string>

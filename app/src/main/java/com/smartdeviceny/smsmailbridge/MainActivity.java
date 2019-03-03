@@ -16,6 +16,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton sendFabButton;
     private TextView textViewAccountName;
     private Button buttonSimulateSMS;
+    private CheckBox checkboxShowNotification;
 
 
     GoogleAccountCredential mCredential;
@@ -88,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         editor = sharedPreferences.edit();
 
         etRecipients = findViewById(R.id.et_recipients);
-        restorePreferences();
+
     }
 
 
@@ -118,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                 //getResultsFromApi(view);
                 String accountName = sharedPreferences.getString(Constants.ACCOUNT_NAME, "");
                 if (accountName.isEmpty()) {
-                    showMessage(view, "Sender not configured");
+                    showMessage(view, "Google Account not configured");
                     return;
                 }
                 if (Utils.isEmpty(etRecipients)) {
@@ -126,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (!PermissionUtils.isSMSReceivePermissionAvailable(
                         MainActivity.this) || !isGooglePlayServicesAvailable() || (mCredential.getSelectedAccountName() == null) || Utils.isEmpty(etRecipients)) {
-                    showMessage(view, "Please run verify, do not have proper permissions/config");
+                    showMessage(view, "Please run verify, need additional permissions/config");
                     return;
                 }
                 new MakeRequestTask(MainActivity.this, mCredential).execute();
@@ -172,6 +175,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        checkboxShowNotification = findViewById(R.id.checkbox_show_notification);
+        checkboxShowNotification.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                savePreferences();
+            }
+        });
+        restorePreferences();
     }
 
 
@@ -194,11 +205,19 @@ public class MainActivity extends AppCompatActivity {
         if (!accountName.isEmpty()) {
             textViewAccountName.setText(accountName);
         }
+        boolean checked = sharedPreferences.getBoolean(Constants.SHARED_PREF_SHOW_NOTIFICATION, true);
+        checkboxShowNotification.setChecked(checked);
     }
 
     private void savePreferences() {
         if (etRecipients.getText() != null) {
             editor.putStringSet(Constants.SHARED_PREF_RECIPIENTS, new HashSet<String>(Arrays.asList(etRecipients.getText().toString().split(";"))));
+            editor.putBoolean(Constants.SHARED_PREF_SHOW_NOTIFICATION, checkboxShowNotification.isChecked());
+            String accountName = mCredential.getSelectedAccountName();
+            if( accountName == null) {
+                accountName = "";
+            }
+            editor.putString(Constants.ACCOUNT_NAME, accountName);
         }
         editor.apply();
     }

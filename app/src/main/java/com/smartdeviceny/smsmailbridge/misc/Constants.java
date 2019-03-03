@@ -10,6 +10,7 @@ public interface Constants {
     String SHARED_PREF_SMTP = "shared_pref_smtp";
     String SHARED_PREF_RECIPIENTS = "shared_pref_recipients";
     String SHARED_PREF_FORWARDER = "shared_pref_forwarder";
+    String SHARED_PREF_SHOW_NOTIFICATION="shared_pref_show_notification";
 
     String EXTRA_SUBJECT = "extra_subject";
     String ACCOUNT_NAME = "account_name";
