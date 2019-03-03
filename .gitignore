@@ -15,4 +15,10 @@ gradle
 .idea/modules.xml
 .idea/runConfigurations.xml
 .idea/vcs.xml
-
+gradlew
+gradlew.bat
+app/libs
+app/release
+app/debug
+app/proguard-rules.pro
+*.swp
