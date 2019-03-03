@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">SMS Mail Bridge</string>
+    <string name="service_name">SMSMailBridgeService</string>
+
+    <string name="btn_send_test_mail">Test Email</string>
+
+    <string name="default_mail_subject">Test mail from SMSMailBridge</string>
+    <string name="default_mail_body">This is an email sent using the Mail JavaMail wrapper from an Android device.</string>
+
+    <string name="mail_subject">Forwarded SMS</string>
+
+    <string name="mail_sent_successfully">Email was sent successfully.</string>
+    <string name="mail_not_sent">Email was not sent.</string>
+    <string name="mail_send_problem">There was a problem sending the email.</string>
+    <string name="mail_could_not_send_email">Could not send email</string>
+
+    <string name="from">"From: "</string>
+    <string name="tv_basic_settings">Basic Settings</string>
+    <string name="tv_recipients">Recipients</string>
+    <string name="tv_forwarder">Forwarder</string>
+    <string name="tv_server_settings">Mail-Server Settings</string>
+    <string name="tv_user">User</string>
+    <string name="tv_password">Password</string>
+    <string name="tv_smtp">SMTP-Server</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="channel_name">SMS Mail Bridge</string>
+    <string name="channel_description">Notification channel for the SMS Mail Bridge.</string>
+
+</resources>
