@@ -5,7 +5,7 @@
     <string name="btn_send_test_mail">Test Email</string>
 
     <string name="default_mail_subject">Test mail from SMSMailBridge</string>
-    <string name="default_mail_body">This is an email sent using the Mail JavaMail wrapper from an Android device.</string>
+    <string name="default_mail_body">This body in a real SMS would contain the SMS message.</string>
 
     <string name="mail_subject">Forwarded SMS</string>
 
