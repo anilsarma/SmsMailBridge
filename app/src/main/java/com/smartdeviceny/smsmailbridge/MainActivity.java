@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,6 +21,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -296,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case Utils.REQUEST_PERMISSION_GET_ACCOUNTS:
                 if (resultCode != RESULT_OK) {
-                    showMessage(sendFabButton, "This App requires the SMS Read ability");
+                    showMessage(sendFabButton, "This App requires SMS Read permission");
                 } else {
                     getResultsFromApi(sendFabButton);
                 }
@@ -477,6 +479,8 @@ public class MainActivity extends AppCompatActivity {
                     startActivityForResult(((UserRecoverableAuthIOException) mLastError).getIntent(), Utils.REQUEST_AUTHORIZATION);
                 } else {
                     showMessage(view, "The following error occurred:\n" + mLastError);
+                    Toast.makeText(getApplicationContext(), "Error:" + mLastError, Toast.LENGTH_LONG).show();
+
                     Log.v("Error failure", mLastError + "");
                 }
             } else {
