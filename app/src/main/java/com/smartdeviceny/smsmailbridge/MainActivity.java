@@ -204,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
         String accountName = sharedPreferences.getString(Constants.ACCOUNT_NAME, "");
         if (!accountName.isEmpty()) {
             textViewAccountName.setText(accountName);
+            mCredential.setSelectedAccountName(accountName);
         }
         boolean checked = sharedPreferences.getBoolean(Constants.SHARED_PREF_SHOW_NOTIFICATION, true);
         checkboxShowNotification.setChecked(checked);
@@ -280,6 +281,7 @@ public class MainActivity extends AppCompatActivity {
                     if (accountName != null) {
                         SharedPreferences settings = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
                         SharedPreferences.Editor editor = settings.edit();
+                        textViewAccountName.setText(accountName);
                         editor.putString(Constants.ACCOUNT_NAME, accountName);
                         editor.apply();
                         mCredential.setSelectedAccountName(accountName);
