@@ -91,13 +91,55 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
         android:checked="true"
         android:text="Show Notification"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.065"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/button_verify"
         app:layout_constraintTop_toBottomOf="@+id/button_verify" />
 
+    <CheckBox
+        android:id="@+id/checkbox_permission_read_phone_numbers"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="104dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:checked="false"
+        android:text="Permission to read Phone Numbers"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_show_notification" />
+
+
+    <CheckBox
+        android:id="@+id/checkbox_premission_to_receive_sms"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="148dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:checked="false"
+        android:text="Permission to receive SMS"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_google_play" />
+
+    <CheckBox
+        android:id="@+id/checkbox_google_play"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="136dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:checked="false"
+        android:text="Access to Google Play"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_permission_read_phone_numbers" />
 
 </android.support.constraint.ConstraintLayout>

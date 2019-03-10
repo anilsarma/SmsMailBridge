@@ -21,6 +21,7 @@ import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.Message;
 import com.smartdeviceny.smsmailbridge.misc.Constants;
+import com.smartdeviceny.smsmailbridge.misc.NotificationGroup;
 import com.smartdeviceny.smsmailbridge.misc.NotificationUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -72,7 +73,7 @@ public class SendMailIntentService extends IntentService {
             toRecipient = to.toArray(new String[0])[0].trim();
         }
         if (from == null || from.isEmpty() || to.isEmpty() || toRecipient.isEmpty()) {
-            NotificationUtils.notify_user(this.getApplicationContext(), Constants.NOTIFICATION_CHANNEL, Constants.NOTIFICATION_GROUP_MAIN, "Not Configured", "Please run the SMS Mailer App", 2, true);
+            NotificationUtils.notify_user_big_text(this.getApplicationContext(), NotificationGroup.BRIDGE, "Please run the SMS Mailer App", NotificationGroup.BRIDGE.getID() +1, true);
             return;
         }
 
@@ -94,15 +95,15 @@ public class SendMailIntentService extends IntentService {
             String result = SendGmailEmail(mService, toRecipient, credential.getSelectedAccountName(), subject, body);
             toastHandler.post(new ToastRunnable(getString(R.string.mail_sent_successfully)));
             if( showNotification) {
-                NotificationUtils.notify_user(this.getApplicationContext(), Constants.NOTIFICATION_CHANNEL, Constants.NOTIFICATION_GROUP_MAIN, "Mail Bridged", body + "\n" + result,
-                        3);
+                NotificationUtils.notify_user_big_text(this.getApplicationContext(), NotificationGroup.BRIDGE, body + "\n" + result,
+                        NotificationGroup.BRIDGE.getID()+3, false);
             }
             //NotificationUtils.notify_user(this.getApplicationContext(), Constants.NOTIFICATION_CHANNEL, Constants.NOTIFICATION_GROUP_MAIN, "Mail Bridged", body, 4);
 
         } catch (Exception e) {
             toastHandler.post(new ToastRunnable(getString(R.string.mail_send_problem)));
             Log.e(SEND_MAIL_INTENT_SERVICE, getString(R.string.mail_could_not_send_email), e);
-            NotificationUtils.notify_user(this.getApplicationContext(), Constants.NOTIFICATION_CHANNEL, Constants.NOTIFICATION_GROUP_MAIN, "Mailer Error", body, 4);
+            NotificationUtils.notify_user_big_text(this.getApplicationContext(), NotificationGroup.BRIDGE,  body, NotificationGroup.BRIDGE.getID()+4, false);
         }
 
     }

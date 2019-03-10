@@ -74,11 +74,14 @@ public class MainActivity extends AppCompatActivity {
     private TextView textViewAccountName;
     private Button buttonSimulateSMS;
     private CheckBox checkboxShowNotification;
+    private CheckBox checkboxPermissionRecvSMS;
+    private CheckBox checkboxPermissionGoolePlay;
+    private CheckBox checkboxPermissionReadPhoneNumber;
 
 
     GoogleAccountCredential mCredential;
     private static final String[] SCOPES = {GmailScopes.GMAIL_LABELS, GmailScopes.GMAIL_COMPOSE, GmailScopes.GMAIL_INSERT, GmailScopes.GMAIL_MODIFY, GmailScopes.GMAIL_READONLY, GmailScopes.MAIL_GOOGLE_COM};
-   // private InternetDetector internetDetector;
+    // private InternetDetector internetDetector;
     public String fileName = "";
 
     private void init() {
@@ -178,15 +181,36 @@ public class MainActivity extends AppCompatActivity {
         });
 
         checkboxShowNotification = findViewById(R.id.checkbox_show_notification);
-        checkboxShowNotification.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
+        checkboxShowNotification.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 savePreferences();
             }
         });
+
+        checkboxPermissionRecvSMS = findViewById(R.id.checkbox_premission_to_receive_sms);
+        checkboxPermissionGoolePlay = findViewById(R.id.checkbox_google_play);
+        checkboxPermissionReadPhoneNumber = findViewById(R.id.checkbox_permission_read_phone_numbers);
+
+        checkboxPermissionRecvSMS.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!PermissionUtils.isSMSReceivePermissionAvailable(MainActivity.this)) {
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECEIVE_SMS}, Utils.REQUEST_PERMISSION_RECV_SMS);
+                }
+            }
+        });
+        checkboxPermissionReadPhoneNumber.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!PermissionUtils.isPermissionReadPhoneNumbers(MainActivity.this)) {
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_PHONE_NUMBERS}, Utils.REQUEST_PERMISSION_READ_PHONE_NUMBERS);
+                }
+            }
+        });
+
         restorePreferences();
     }
-
 
 
     private void restorePreferences() {
@@ -210,6 +234,19 @@ public class MainActivity extends AppCompatActivity {
         }
         boolean checked = sharedPreferences.getBoolean(Constants.SHARED_PREF_SHOW_NOTIFICATION, true);
         checkboxShowNotification.setChecked(checked);
+
+        checkboxPermissionRecvSMS.setChecked(PermissionUtils.isSMSReceivePermissionAvailable(this));
+        checkboxPermissionReadPhoneNumber.setChecked(PermissionUtils.isPermissionReadPhoneNumbers(this));
+        checkboxPermissionGoolePlay.setChecked(isGooglePlayServicesAvailable());
+
+        CheckBox tmp[] = {checkboxPermissionRecvSMS, checkboxPermissionGoolePlay, checkboxPermissionReadPhoneNumber};
+        for (CheckBox cb : tmp) {
+            if (cb.isChecked()) {
+                cb.setEnabled(false);
+            }
+        }
+
+
     }
 
     private void savePreferences() {
@@ -217,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
             editor.putStringSet(Constants.SHARED_PREF_RECIPIENTS, new HashSet<String>(Arrays.asList(etRecipients.getText().toString().split(";"))));
             editor.putBoolean(Constants.SHARED_PREF_SHOW_NOTIFICATION, checkboxShowNotification.isChecked());
             String accountName = mCredential.getSelectedAccountName();
-            if( accountName == null) {
+            if (accountName == null) {
                 accountName = "";
             }
             editor.putString(Constants.ACCOUNT_NAME, accountName);
@@ -271,8 +308,12 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case Utils.REQUEST_GOOGLE_PLAY_SERVICES:
                 if (resultCode != RESULT_OK) {
+                    checkboxPermissionGoolePlay.setChecked(false);
+                    checkboxPermissionGoolePlay.setEnabled(true);
                     showMessage(sendFabButton, "This app requires Google Play Services. Please install " + "Google Play Services on your device and relaunch this app.");
                 } else {
+                    checkboxPermissionGoolePlay.setChecked(true);
+                    checkboxPermissionGoolePlay.setEnabled(false);
                     getResultsFromApi(sendFabButton);
                 }
                 break;
@@ -301,6 +342,7 @@ public class MainActivity extends AppCompatActivity {
                     showMessage(sendFabButton, "This App requires SMS Read permission");
                 } else {
                     getResultsFromApi(sendFabButton);
+
                 }
                 break;
             case Utils.REQUEST_AUTHORIZATION:
@@ -311,14 +353,24 @@ public class MainActivity extends AppCompatActivity {
             case Utils.REQUEST_PERMISSION_RECV_SMS:
                 if (resultCode == RESULT_OK) {
                     getResultsFromApi(sendFabButton);
+                    checkboxPermissionRecvSMS.setChecked(true);
+                    checkboxPermissionRecvSMS.setEnabled(false);
+
                 } else {
+                    checkboxPermissionRecvSMS.setChecked(false);
+                    checkboxPermissionRecvSMS.setEnabled(true);
                     showMessage(sendFabButton, "This App requires the SMS Recv ability");
                 }
+                checkboxPermissionRecvSMS.invalidate();
                 break;
             case Utils.REQUEST_PERMISSION_READ_PHONE_NUMBERS:
-                if(resultCode == RESULT_OK) {
+                if (resultCode == RESULT_OK) {
                     getResultsFromApi(sendFabButton);
+                    checkboxPermissionReadPhoneNumber.setChecked(true);
+                    checkboxPermissionReadPhoneNumber.setEnabled(false);
                 } else {
+                    checkboxPermissionReadPhoneNumber.setChecked(false);
+                    checkboxPermissionReadPhoneNumber.setEnabled(true);
                     showMessage(sendFabButton, "The App need access to the phone number to send in the email.");
                 }
         }
@@ -334,7 +386,7 @@ public class MainActivity extends AppCompatActivity {
 //            requestReadAndSendSmsPermission();
 //        } else
         try {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED) {
+            if (!PermissionUtils.isPermissionReadPhoneNumbers(this)) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_NUMBERS}, Utils.REQUEST_PERMISSION_READ_PHONE_NUMBERS);
             } else if (!PermissionUtils.isSMSReceivePermissionAvailable(this)) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS}, Utils.REQUEST_PERMISSION_RECV_SMS);
@@ -342,13 +394,13 @@ public class MainActivity extends AppCompatActivity {
                 acquireGooglePlayServices();
             } else if (mCredential.getSelectedAccountName() == null) {
                 chooseAccount(view);
-            }  else if (Utils.isEmpty(etRecipients)) {
+            } else if (Utils.isEmpty(etRecipients)) {
                 showMessage(view, "Email Recipient not configured");
             } else {
                 //new MakeRequestTask(this, mCredential).execute();
                 showMessage(view, "All permissions are correct.");
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
