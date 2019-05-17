@@ -6,7 +6,6 @@ local.properties
 .DS_Store
 build
 captures
-gradle
 .idea/assetWizardSettings.xml
 .idea/caches/
 .idea/codeStyles/Project.xml
@@ -15,8 +14,6 @@ gradle
 .idea/modules.xml
 .idea/runConfigurations.xml
 .idea/vcs.xml
-gradlew
-gradlew.bat
 app/libs
 app/release
 app/debug
