@@ -14,7 +14,7 @@ captures
 .idea/modules.xml
 .idea/runConfigurations.xml
 .idea/vcs.xml
-app/libs
+.idea/encodings.xml
 app/release
 app/debug
 app/proguard-rules.pro
